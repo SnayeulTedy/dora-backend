@@ -21,7 +21,7 @@ export class User {
     @Column()
     email: string
 
-    @Column()
+     @Column({ type: 'date', nullable: true })
     @IsOptional()
     date_naissance: Date;
 
@@ -41,8 +41,9 @@ export class User {
     @Column()
     password: string;
 
-    @Column( {nullable: true })
-    delete_date: Date;
+    @Column({ type: 'timestamp', nullable: true })
+    delete_date?: Date | null;
+
 
     @Column({ default: true })
     isActive: boolean;

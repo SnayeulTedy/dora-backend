@@ -5,28 +5,32 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { User } from './users/user.entity';
 import { AuthModule } from './Auth/auth.module';
-import { UsersService } from './users/users.service';
-import { AuthService } from './Auth/auth.service';
-import { AuthController } from './Auth/auth.controller';
-import { UsersController } from './users/users.controller';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     UsersModule,
-    // AuthModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'admin',
-      database: 'dora_db',
-      entities: [User],
-      synchronize: true,
+    AuthModule,
+    ConfigModule.forRoot({
+      isGlobal: true, envFilePath: '.env',
     }),
-    
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'postgres',
+        url: config.get<string>('DATABASE_URL'),
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        ssl: true,
+        extra: {
+          ssl: { rejectUnauthorized: false },
+        },
+        synchronize: false,
+      }),
+    }),
+
   ],
   controllers: [AppController],
-  providers: [AppService, ],
+  providers: [AppService,],
 })
-export class AppModule {}
+export class AppModule { }

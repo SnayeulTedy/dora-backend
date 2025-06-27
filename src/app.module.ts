@@ -3,9 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
-import { User } from './users/user.entity';
 import { AuthModule } from './Auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { RolesGuard } from './users/guard/role.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -25,12 +26,18 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         extra: {
           ssl: { rejectUnauthorized: false },
         },
-        synchronize: false,
+        synchronize: true,
       }),
     }),
 
   ],
   controllers: [AppController],
-  providers: [AppService,],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule { }

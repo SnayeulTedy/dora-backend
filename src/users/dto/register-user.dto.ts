@@ -6,10 +6,10 @@ export class RegisterUserDto {
     @MaxLength(20)
     nom: string;
 
-    @IsString()
-    @MinLength(2)
-    @MaxLength(20)
-    prenom: string;
+    // @IsString()
+    // @MinLength(2)
+    // @MaxLength(20)
+    // prenom: string;
 
     @IsEmail()
     email: string;

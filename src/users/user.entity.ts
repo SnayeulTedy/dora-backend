@@ -15,8 +15,8 @@ export class User {
     @Column()
     nom: string;
 
-    @Column()
-    prenom: string;
+    // @Column()
+    // prenom: string;
 
     @Column()
     email: string

@@ -7,11 +7,11 @@ export class UpdateUserDto {
     @IsOptional()
     nom: string;
 
-    @IsString()
-    @MinLength(2)
-    @MaxLength(20)
-    @IsOptional()
-    prenom: string;
+    // @IsString()
+    // @MinLength(2)
+    // @MaxLength(20)
+    // @IsOptional()
+    // prenom: string;
 
     @IsEmail()
     @IsOptional()

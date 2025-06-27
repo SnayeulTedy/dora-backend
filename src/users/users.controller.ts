@@ -1,8 +1,10 @@
 import { Body, Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { RegisterUserDto } from './dto/register-user.dto';
-import { User, UserRole } from './user.entity';
+import { User } from './user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserRole } from './enum/roles.enum';
+import { Roles } from './decorator/role.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -21,8 +23,8 @@ export class UsersController {
 
   @Post('register')
   async register(@Body() registerUserDto: RegisterUserDto) {
-    const { nom, prenom, email, password, date_naissance } = registerUserDto;
-    return this.userService.register(nom, prenom, email, password, date_naissance);
+    const { nom, email, password, date_naissance } = registerUserDto;
+    return this.userService.register(nom, email, password, date_naissance);
   }
 
   @Post('update/:id')
@@ -30,8 +32,8 @@ export class UsersController {
     @Param('id') id: string,
     @Body() updateUSerDto: UpdateUserDto
   ): Promise<User> {
-    const { nom, prenom, email, password, date_naissance } = updateUSerDto;
-    const user = await this.userService.update(id, nom, prenom, email, password, date_naissance);
+    const { nom, email, password, date_naissance } = updateUSerDto;
+    const user = await this.userService.update(id, nom,  email, password, date_naissance);
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
@@ -58,6 +60,7 @@ export class UsersController {
   }
 
   @Post('disable/:id')
+  @Roles(UserRole.Admin)
   async disable(@Param('id') id: string): Promise<User> {
     const user = await this.userService.disable(id);
     if (!user) {

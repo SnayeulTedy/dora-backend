@@ -1,11 +1,8 @@
 import { BeforeInsert, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 import * as bcrypt from 'bcrypt';
 import { IsEmpty, IsOptional } from "class-validator";
+import { UserRole } from "./enum/roles.enum";
 
-export enum UserRole {
-    Admin = 'admin',
-    User = 'user',
-}
 
 @Entity()
 export class User {

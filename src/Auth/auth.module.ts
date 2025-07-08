@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { RolesGuard } from 'src/users/guard/role.guard';
 
 @Module({
   imports: [
@@ -13,13 +14,13 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     PassportModule,
     JwtModule.registerAsync({  
       useFactory: () => ({
-        secret: process.env.JWT_SECRET || 'dora-exploratrice',
+        secret: process.env.JWT_SECRET,
         signOptions: { expiresIn: '3600s' },
       }),
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, RolesGuard],
   controllers: [AuthController],
-  exports: [AuthService, JwtModule], 
+  exports: [AuthService, JwtModule, RolesGuard], 
 })
 export class AuthModule {}
